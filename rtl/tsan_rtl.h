@@ -731,6 +731,8 @@ void ALWAYS_INLINE TraceAddEvent(ThreadState *thr, FastState fs,
   *evp = ev;
 }
 
+/* TODO: it should be set of addrs */
+extern uptr race_addr;
 }  // namespace __tsan
 
 #endif  // TSAN_RTL_H

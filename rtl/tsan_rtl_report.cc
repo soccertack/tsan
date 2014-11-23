@@ -25,8 +25,11 @@
 #include "tsan_mman.h"
 #include "tsan_flags.h"
 #include "tsan_fd.h"
+#include <time.h>
 
 namespace __tsan {
+
+uptr race_addr = 0;
 
 using namespace __sanitizer;  // NOLINT
 
@@ -432,6 +435,11 @@ void RestoreStack(int tid, const u64 epoch, VarSizeStackTrace *stk,
 static bool HandleRacyStacks(ThreadState *thr, VarSizeStackTrace traces[2],
                              uptr addr_min, uptr addr_max) {
   bool equal_stack = false;
+
+  /* TODO: we'll skip this if there is already race at this addr.  
+  It's also possible to turn off suppress flags */
+  return false;
+
   RacyStacks hash;
   if (flags()->suppress_equal_stacks) {
     hash.hash[0] = md5_hash(traces[0].trace, traces[0].size * sizeof(uptr));
@@ -658,6 +666,16 @@ void ReportRace(ThreadState *thr) {
 
   if (!OutputReport(thr, rep))
     return;
+
+  /* Just test to print timestamp */
+  if(race_addr) {
+	  struct timespec ts_current;
+	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
+	  Printf("The timestamp of is %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
+  }
+
+  /* TODO: This should be adding addr to set of race_addr. We can use Set or Hash. */
+  race_addr = addr;
 
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }

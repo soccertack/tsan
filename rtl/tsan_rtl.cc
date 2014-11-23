@@ -640,6 +640,10 @@ void UnalignedMemoryAccess(ThreadState *thr, uptr pc, uptr addr,
 
 ALWAYS_INLINE
 bool ContainsSameAccessSlow(u64 *s, u64 a, u64 sync_epoch, bool is_write) {
+
+	/* TODO: for now, bypass this logic if a race is already detected at this addr */
+	if (race_addr == ShadowToMem((uptr)s))
+		return false;
   Shadow cur(a);
   for (uptr i = 0; i < kShadowCnt; i++) {
     Shadow old(LoadShadow(&s[i]));
