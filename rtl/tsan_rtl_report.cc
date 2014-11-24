@@ -457,10 +457,6 @@ static bool HandleRacyStacks(ThreadState *thr, VarSizeStackTrace traces[2],
                              uptr addr_min, uptr addr_max) {
   bool equal_stack = false;
 
-  /* TODO: we'll skip this if there is already race at this addr.  
-  It's also possible to turn off suppress flags */
-  return false;
-
   RacyStacks hash;
   if (flags()->suppress_equal_stacks) {
     hash.hash[0] = md5_hash(traces[0].trace, traces[0].size * sizeof(uptr));
@@ -657,8 +653,10 @@ void ReportRace(ThreadState *thr) {
   if (IsFiredSuppression(ctx, rep, traces[1]))
     return;
 
+  if(!is_racy_addr(addr_min)) {
   if (HandleRacyStacks(thr, traces, addr_min, addr_max))
     return;
+  }
 
   for (uptr i = 0; i < kMop; i++) {
     Shadow s(thr->racy_state[i]);
@@ -688,22 +686,19 @@ void ReportRace(ThreadState *thr) {
   if (!OutputReport(thr, rep))
     return;
 
-    Printf("after report\n");
-
   /* Just test to print timestamp */
-  if(is_racy_addr(addr)) {
+  if(is_racy_addr(addr_min)) {
 	  struct timespec ts_current;
 	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
 	  Printf("\n\nThe timestamp of is %lld:%lld\n\n\n",ts_current.tv_sec, ts_current.tv_nsec);
   } else {
 	  void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
 	  ReportThread *paddr = new(mem) ReportThread();
-	  paddr->pid = addr;
+	  paddr->pid = addr_min;
 	  race_addrs.push_back(paddr);
-	  Printf("addr %p is added\n", addr);
+	  Printf("addr %p is added\n", addr_min);
 
   }
-  race_addr = addr;
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }
 
