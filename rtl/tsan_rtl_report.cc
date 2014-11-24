@@ -25,12 +25,33 @@
 #include "tsan_mman.h"
 #include "tsan_flags.h"
 #include "tsan_fd.h"
+#include "sanitizer_common/sanitizer_list.h"
 #include <time.h>
 
 namespace __tsan {
 
 uptr race_addr = 0;
+IntrusiveList<ReportThread> race_addrs;
+//std::set<uptr> race_addrs;
 
+bool is_racy_addr(uptr addr)
+{
+	int i = 0;
+	uptr tmp = 0;
+//	Printf("looking for %p\n", addr);
+	IntrusiveList<ReportThread>::Iterator it(&race_addrs);
+	while (it.hasNext()) {
+		tmp = it.next()->pid;
+//		Printf("is_racy_Addr: %dth iteration, stored addr is %p\n", i, tmp);
+		if (tmp == addr)
+		{
+//			Printf("return true!!!\n");
+			return true;
+		}
+	}
+//	Printf("return false!!!\n");
+	return false;
+}
 using namespace __sanitizer;  // NOLINT
 
 static ReportStack *SymbolizeStack(StackTrace trace);
@@ -667,16 +688,22 @@ void ReportRace(ThreadState *thr) {
   if (!OutputReport(thr, rep))
     return;
 
+    Printf("after report\n");
+
   /* Just test to print timestamp */
-  if(race_addr) {
+  if(is_racy_addr(addr)) {
 	  struct timespec ts_current;
 	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
-	  Printf("The timestamp of is %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
+	  Printf("\n\nThe timestamp of is %lld:%lld\n\n\n",ts_current.tv_sec, ts_current.tv_nsec);
+  } else {
+	  void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
+	  ReportThread *paddr = new(mem) ReportThread();
+	  paddr->pid = addr;
+	  race_addrs.push_back(paddr);
+	  Printf("addr %p is added\n", addr);
+
   }
-
-  /* TODO: This should be adding addr to set of race_addr. We can use Set or Hash. */
   race_addr = addr;
-
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }
 

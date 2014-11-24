@@ -32,14 +32,16 @@ do {
     // same thread?
     
     /* TODO: only if we have a race at this addr, we'll skip this check */
-    /*
-    if (Shadow::TidsAreEqual(old, cur)) {
-      StatInc(thr, StatShadowSameThread);
-      if (old.IsRWWeakerOrEqual(kAccessIsWrite, kIsAtomic))
-        StoreIfNotYetStored(sp, &store_word);
-      break;
+//    if (!is_racy_addr(ShadowToMem((uptr)cur.raw())))
+  	if (false)
+    {
+	    if (Shadow::TidsAreEqual(old, cur)) {
+		    StatInc(thr, StatShadowSameThread);
+		    if (old.IsRWWeakerOrEqual(kAccessIsWrite, kIsAtomic))
+			    StoreIfNotYetStored(sp, &store_word);
+		    break;
+	    }
     }
-    */
     StatInc(thr, StatShadowAnotherThread);
     if (HappensBefore(old, thr)) {
       StoreIfNotYetStored(sp, &store_word);

@@ -92,6 +92,8 @@ struct ReportThread {
   char *name;
   int parent_tid;
   ReportStack *stack;
+  ReportThread *next;
+  
 };
 
 struct ReportMutex {
