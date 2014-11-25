@@ -15,6 +15,7 @@ AcquireReleaseImpl	rtl/tsan_rtl_mutex.cc	/^void AcquireReleaseImpl(ThreadState *
 Add	rtl/tsan_ignoreset.cc	/^void IgnoreSet::Add(u32 stack_id) {$/;"	f	class:__tsan::IgnoreSet
 Add	rtl/tsan_mutexset.cc	/^void MutexSet::Add(u64 id, bool write, u64 epoch) {$/;"	f	class:__tsan::MutexSet
 Add	rtl/tsan_mutexset.h	/^void MutexSet::Add(u64 id, bool write, u64 epoch) {}$/;"	f	class:__tsan::MutexSet
+AddAllocCounter	rtl/tsan_rtl_report.cc	/^void ScopedReport::AddAllocCounter(uptr alloc_counter) {$/;"	f	class:__tsan::ScopedReport
 AddDeadMutex	rtl/tsan_rtl_report.cc	/^void ScopedReport::AddDeadMutex(u64 id) {$/;"	f	class:__tsan::ScopedReport
 AddExpectRace	rtl/tsan_interface_ann.cc	/^static void AddExpectRace(ExpectRace *list,$/;"	f	namespace:__tsan
 AddLocation	rtl/tsan_rtl_report.cc	/^void ScopedReport::AddLocation(uptr addr, uptr size) {$/;"	f	class:__tsan::ScopedReport
@@ -180,10 +181,10 @@ CurrentStackId	rtl/tsan_rtl.cc	/^u32 CurrentStackId(ThreadState *thr, uptr pc) {
 CurrentStackTrace	dd/dd_rtl.cc	/^static u32 CurrentStackTrace(Thread *thr, uptr skip) {$/;"	f	namespace:__dsan
 DDMutexInit	rtl/tsan_rtl_mutex.cc	/^void DDMutexInit(ThreadState *thr, uptr pc, SyncVar *s) {$/;"	f	namespace:__tsan
 DD_RTL_H	dd/dd_rtl.h	10;"	d
-DPrintf	rtl/tsan_rtl.h	575;"	d
 DPrintf	rtl/tsan_rtl.h	577;"	d
-DPrintf2	rtl/tsan_rtl.h	581;"	d
+DPrintf	rtl/tsan_rtl.h	579;"	d
 DPrintf2	rtl/tsan_rtl.h	583;"	d
+DPrintf2	rtl/tsan_rtl.h	585;"	d
 Data	tests/rtl/tsan_mop.cc	/^  static int Data[4];$/;"	m	struct:ClassWithStatic	file:
 Data	tests/rtl/tsan_mop.cc	/^int ClassWithStatic::Data[4];$/;"	m	class:ClassWithStatic	file:
 DebugDump	rtl/tsan_clock.cc	/^void SyncClock::DebugDump(int(*printf)(const char *s, ...)) {$/;"	f	class:__tsan::SyncClock
@@ -315,8 +316,8 @@ GetThreadTraceHeader	rtl/tsan_platform.h	/^uptr ALWAYS_INLINE GetThreadTraceHead
 GetTracePos	rtl/tsan_rtl.h	/^  u64 GetTracePos() const {$/;"	f	class:__tsan::FastState
 GrowShadowStack	rtl/tsan_rtl.cc	/^void GrowShadowStack(ThreadState *thr) {$/;"	f	namespace:__tsan
 H	rtl/tsan_md5.cc	19;"	d	file:
-HACKY_CALL	rtl/tsan_rtl.h	693;"	d
-HACKY_CALL	rtl/tsan_rtl.h	702;"	d
+HACKY_CALL	rtl/tsan_rtl.h	695;"	d
+HACKY_CALL	rtl/tsan_rtl.h	704;"	d
 HandleEvent	tests/rtl/tsan_test_util_linux.cc	/^void ScopedThread::Impl::HandleEvent(Event *ev) {$/;"	f	class:ScopedThread::Impl
 HandleRace	rtl/tsan_rtl.cc	/^void HandleRace(ThreadState *thr, u64 *shadow_mem,$/;"	f	namespace:__tsan
 HandleRacyStacks	rtl/tsan_rtl_report.cc	/^static bool HandleRacyStacks(ThreadState *thr, VarSizeStackTrace traces[2],$/;"	f	namespace:__tsan
@@ -1619,6 +1620,8 @@ alive_	tests/rtl/tsan_test_util.h	/^  bool alive_;$/;"	m	class:Mutex
 all_threads_ready	benchmarks/start_many_threads.cc	/^pthread_barrier_t all_threads_ready;$/;"	v
 all_threads_ready	benchmarks/vts_many_threads_bench.cc	/^pthread_barrier_t all_threads_ready, main_threads_ready;$/;"	v
 alloc_cache	rtl/tsan_rtl.h	/^  AllocatorCache alloc_cache;$/;"	m	struct:__tsan::ThreadState
+alloc_counter	rtl/tsan_report.h	/^  uptr alloc_counter;$/;"	m	class:__tsan::ReportDesc
+alloc_counter	rtl/tsan_rtl.h	/^  uptr alloc_counter;$/;"	m	struct:__tsan::ThreadState
 allocate_addr	tests/rtl/tsan_test_util_linux.cc	/^static void* allocate_addr(int size, int offset_from_aligned = 0) {$/;"	f	file:
 allocator	rtl/tsan_mman.cc	/^Allocator *allocator() {$/;"	f	namespace:__tsan
 allocsync	rtl/tsan_fd.cc	/^static FdSync *allocsync(ThreadState *thr, uptr pc) {$/;"	f	namespace:__tsan
@@ -1744,8 +1747,8 @@ foobar	go/test.c	/^void foobar() {}$/;"	f
 foobarbaz	tests/rtl/tsan_mop.cc	/^static void foobarbaz() {}$/;"	f	file:
 force_seq_cst_atomics	rtl/tsan_flags.h	/^  bool force_seq_cst_atomics;$/;"	m	struct:__tsan::Flags
 freelist_	rtl/tsan_dense_alloc.h	/^  IndexT freelist_;$/;"	m	class:__tsan::DenseSlabAlloc
-fsanitize	mytest/Makefile	/^	..\/..\/..\/..\/..\/build\/bin\/clang four_races.c -fsanitize=thread -g -o four_race$/;"	m
-fsanitize	mytest/Makefile	/^	..\/..\/..\/..\/..\/build_ori\/bin\/clang four_races.c -fsanitize=thread -g$/;"	m
+fsanitize	mytest/Makefile	/^	..\/..\/..\/..\/..\/build\/bin\/clang four_races.c -fsanitize=thread -g -o four_races$/;"	m
+fsanitize	mytest/Makefile	/^	..\/..\/..\/..\/..\/build_ori\/bin\/clang four_race.c -fsanitize=thread -g -o four_races$/;"	m
 func	go/tsan_go.cc	/^  char *func;$/;"	m	struct:__tsan::SymbolizeContext	file:
 func_add	rtl/tsan_interface_atomic.cc	/^a128 func_add(volatile a128 *v, a128 op) {$/;"	f
 func_add	rtl/tsan_interface_atomic.cc	/^template<typename T> T func_add(volatile T *v, T op) {$/;"	f
@@ -1833,7 +1836,7 @@ is_broken	rtl/tsan_sync.h	/^  bool is_broken;$/;"	m	struct:__tsan::SyncVar
 is_dead	rtl/tsan_rtl.h	/^  bool is_dead;$/;"	m	struct:__tsan::ThreadState
 is_freeing	rtl/tsan_rtl.h	/^  bool is_freeing;$/;"	m	struct:__tsan::ThreadState
 is_linker_init	rtl/tsan_sync.h	/^  bool is_linker_init;$/;"	m	struct:__tsan::SyncVar
-is_racy_addr	rtl/tsan_rtl_report.cc	/^bool is_racy_addr(uptr addr)$/;"	f	namespace:__tsan
+is_racy_addr	rtl/tsan_rtl_report.cc	/^ReportThread* is_racy_addr(uptr addr)$/;"	f	namespace:__tsan
 is_recursive	rtl/tsan_sync.h	/^  bool is_recursive;$/;"	m	struct:__tsan::SyncVar
 is_rw	rtl/tsan_sync.h	/^  bool is_rw;$/;"	m	struct:__tsan::SyncVar
 is_sync_signal	rtl/tsan_interceptors.cc	/^static bool is_sync_signal(SignalContext *sctx, int sig) {$/;"	f	file:
@@ -2021,6 +2024,7 @@ noinstr	tests/rtl/tsan_bench.cc	/^void noinstr(void *p) {}$/;"	f
 nomalloc	rtl/tsan_rtl.h	/^  int nomalloc;$/;"	m	struct:__tsan::ThreadState
 nothrow_t	rtl/tsan_interceptors.cc	/^struct nothrow_t {};$/;"	s	namespace:std	file:
 nreported	rtl/tsan_rtl.h	/^  int nreported;$/;"	m	struct:__tsan::Context
+nsec	rtl/tsan_report.h	/^  u64 nsec;$/;"	m	struct:__tsan::ReportThread
 off	go/tsan_go.cc	/^  uptr off;$/;"	m	struct:__tsan::SymbolizeContext	file:
 on_exit_wrapper	rtl/tsan_interceptors.cc	/^static void on_exit_wrapper(int status, void *arg) {$/;"	f	file:
 opaque	rtl/tsan_interceptors.cc	/^  u64 opaque[128 \/ sizeof(u64)];$/;"	m	struct:my_siginfo_t	file:
@@ -2098,6 +2102,7 @@ sa_mask	rtl/tsan_interceptors.cc	/^  __sanitizer_sigset_t sa_mask;$/;"	m	struct:
 sa_restorer	rtl/tsan_interceptors.cc	/^  void (*sa_restorer)();$/;"	m	struct:sigaction_t	file:
 sa_sigaction	rtl/tsan_interceptors.cc	/^    void (*sa_sigaction)(int sig, my_siginfo_t *siginfo, void *uctx);$/;"	m	union:sigaction_t::__anon1	file:
 sa_sigaction	rtl/tsan_platform_linux.cc	56;"	d	file:
+sec	rtl/tsan_report.h	/^  u64 sec;$/;"	m	struct:__tsan::ReportThread
 send	tests/rtl/tsan_test_util_linux.cc	/^void ScopedThread::Impl::send(Event *e) {$/;"	f	class:ScopedThread::Impl
 seq_	rtl/tsan_mutex.h	/^  u64 seq_;$/;"	m	class:__tsan::InternalDeadlockDetector
 set	rtl/tsan_clock.cc	/^void ThreadClock::set(unsigned tid, u64 v) {$/;"	f	class:__tsan::ThreadClock
@@ -2207,6 +2212,7 @@ tid	rtl/tsan_report.h	/^  int tid;$/;"	m	struct:__tsan::ReportMop
 tid	rtl/tsan_rtl.h	/^  const int tid;$/;"	m	struct:__tsan::ThreadState
 tid	rtl/tsan_rtl.h	/^  u64 tid() const {$/;"	f	class:__tsan::FastState
 tid	tests/unit/tsan_clock_test.cc	/^  unsigned tid;$/;"	m	struct:__tsan::SimpleThreadClock	file:
+timespec_diff	rtl/tsan_rtl_report.cc	/^struct timespec timespec_diff(struct timespec start, struct timespec end)$/;"	f	namespace:__tsan
 tls_addr	rtl/tsan_rtl.h	/^  const uptr tls_addr;$/;"	m	struct:__tsan::ThreadState
 tls_addr	rtl/tsan_rtl_thread.cc	/^  uptr tls_addr;$/;"	m	struct:__tsan::OnStartedArgs	file:
 tls_size	rtl/tsan_rtl.h	/^  const uptr tls_size;$/;"	m	struct:__tsan::ThreadState

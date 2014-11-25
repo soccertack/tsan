@@ -733,7 +733,7 @@ ALWAYS_INLINE USED
 void MemoryAccess(ThreadState *thr, uptr pc, uptr addr,
     int kAccessSizeLog, bool kAccessIsWrite, bool kIsAtomic) {
   u64 *shadow_mem = (u64*)MemToShadow(addr);
-  DPrintf2("#%d: MemoryAccess: @%p %p size=%d"
+  DPrintf2("#%d: jMemoryAccess: @%p %p size=%d"
       " is_write=%d shadow_mem=%p {%zx, %zx, %zx, %zx}\n",
       (int)thr->fast_state.tid(), (void*)pc, (void*)addr,
       (int)(1 << kAccessSizeLog), kAccessIsWrite, shadow_mem,
