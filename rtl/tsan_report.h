@@ -113,6 +113,7 @@ class ReportDesc {
   Vector<ReportThread*> threads;
   Vector<int> unique_tids;
   ReportStack *sleep;
+  uptr alloc_counter;
   int count;
 
   ReportDesc();

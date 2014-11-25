@@ -377,6 +377,9 @@ void ScopedReport::AddSleep(u32 stack_id) {
   rep_->sleep = SymbolizeStackId(stack_id);
 }
 #endif
+void ScopedReport::AddAllocCounter(uptr alloc_counter) {
+  rep_->alloc_counter = alloc_counter;
+}
 
 void ScopedReport::SetCount(int count) {
   rep_->count = count;
@@ -682,6 +685,7 @@ void ReportRace(ThreadState *thr) {
       rep.AddSleep(thr->last_sleep_stack_id);
   }
 #endif
+  rep.AddAllocCounter(thr->alloc_counter);
 
   if (!OutputReport(thr, rep))
     return;

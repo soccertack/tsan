@@ -380,6 +380,7 @@ struct ThreadState {
   u32 last_sleep_stack_id;
   ThreadClock last_sleep_clock;
 #endif
+  uptr alloc_counter;
 
   // Set in regions of runtime that must be signal-safe and fork-safe.
   // If set, malloc must not be called.
@@ -508,6 +509,7 @@ class ScopedReport {
   u64 AddMutex(u64 id);
   void AddLocation(uptr addr, uptr size);
   void AddSleep(u32 stack_id);
+  void AddAllocCounter(uptr alloc_counter);
   void SetCount(int count);
 
   const ReportDesc *GetReport() const;
