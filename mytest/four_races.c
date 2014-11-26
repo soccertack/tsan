@@ -9,6 +9,7 @@ int global1;
 int global2;
 int global3;
 int global4;
+int global5;
 
 // Starting two Thread1_bug1 will create a race. The window here is small, just the printf.
 void *Thread_bug1(void *x) {
@@ -61,9 +62,18 @@ void *Thread_bug4(void *x) {
     fclose(file);
     return NULL;
 }
+//
+// Starting two Thread_bug5 will create a race. The window here is the malloc.
+void *Thread_bug5(void *x) {
+    int temp = global5;
+    char* buf = (char*) malloc(1000);
+    global5++;
+    return NULL;
+}
 
 int main() {
-    pthread_t t[8];
+    const int nthreads = 10;
+    pthread_t t[nthreads];
 
     int inputLoop = 10000;
 
@@ -75,13 +85,11 @@ int main() {
     pthread_create(&t[5], NULL, Thread_bug3, &inputLoop);
     pthread_create(&t[6], NULL, Thread_bug4, NULL);
     pthread_create(&t[7], NULL, Thread_bug4, NULL);
+    pthread_create(&t[8], NULL, Thread_bug5, NULL);
+    pthread_create(&t[9], NULL, Thread_bug5, NULL);
 
-    pthread_join(t[0], NULL);
-    pthread_join(t[1], NULL);
-    pthread_join(t[2], NULL);
-    pthread_join(t[3], NULL);
-    pthread_join(t[4], NULL);
-    pthread_join(t[5], NULL);
-    pthread_join(t[6], NULL);
-    pthread_join(t[7], NULL);
+    int i = 0;
+    for (i = 0; i < nthreads; i++) {
+        pthread_join(t[i], NULL);
+    }
 }
