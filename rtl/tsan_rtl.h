@@ -704,6 +704,7 @@ void AcquireReleaseImpl(ThreadState *thr, uptr pc, SyncClock *c);
 #define HACKY_CALL(f) f()
 #endif
 
+
 void TraceSwitch(ThreadState *thr);
 uptr TraceTopPC(ThreadState *thr);
 uptr TraceSize();

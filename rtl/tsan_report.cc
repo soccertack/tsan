@@ -16,6 +16,7 @@
 #include "sanitizer_common/sanitizer_placement_new.h"
 #include "sanitizer_common/sanitizer_report_decorator.h"
 #include "sanitizer_common/sanitizer_stacktrace_printer.h"
+#include <time.h>
 
 namespace __tsan {
 
@@ -311,8 +312,6 @@ void PrintReport(const ReportDesc *rep) {
   if (rep->sleep)
     PrintSleep(rep->sleep);
 
-  Printf("Memory allocated: %zd\n", rep->alloc_counter);
-
   for (uptr i = 0; i < rep->locs.Size(); i++)
     PrintLocation(rep->locs[i]);
 
@@ -333,6 +332,13 @@ void PrintReport(const ReportDesc *rep) {
   }
 
   Printf("==================\n");
+
+  struct timespec ts_current;
+  clock_gettime(CLOCK_MONOTONIC, &ts_current);
+
+  Printf("Heuristics:\n");
+  Printf("Memory allocated: %zd\n", rep->alloc_counter);
+  Printf("Report Timestamp: %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
 }
 
 #else  // #ifndef TSAN_GO

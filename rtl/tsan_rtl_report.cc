@@ -36,7 +36,6 @@ IntrusiveList<ReportThread> race_addrs;
 
 bool is_racy_addr(uptr addr)
 {
-	int i = 0;
 	uptr tmp = 0;
 //	Printf("looking for %p\n", addr);
 	IntrusiveList<ReportThread>::Iterator it(&race_addrs);
@@ -656,10 +655,10 @@ void ReportRace(ThreadState *thr) {
   if (IsFiredSuppression(ctx, rep, traces[1]))
     return;
 
-  if(!is_racy_addr(addr_min)) {
+  //if(!is_racy_addr(addr_min)) {
   if (HandleRacyStacks(thr, traces, addr_min, addr_max))
     return;
-  }
+  //}
 
   for (uptr i = 0; i < kMop; i++) {
     Shadow s(thr->racy_state[i]);
@@ -691,18 +690,18 @@ void ReportRace(ThreadState *thr) {
     return;
 
   /* Just test to print timestamp */
-  if(is_racy_addr(addr_min)) {
-	  struct timespec ts_current;
-	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
-	  Printf("\n\nThe timestamp of is %lld:%lld\n\n\n",ts_current.tv_sec, ts_current.tv_nsec);
-  } else {
-	  void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
-	  ReportThread *paddr = new(mem) ReportThread();
-	  paddr->pid = addr_min;
-	  race_addrs.push_back(paddr);
-	  Printf("addr %p is added\n", addr_min);
+  //if(is_racy_addr(addr_min)) {
+	  ////struct timespec ts_current;
+	  ////clock_gettime(CLOCK_MONOTONIC, &ts_current);
+	  ////Printf("\n\nThe timestamp of is %lld:%lld\n\n\n",ts_current.tv_sec, ts_current.tv_nsec);
+  //} else {
+	  //void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
+	  //ReportThread *paddr = new(mem) ReportThread();
+	  //paddr->pid = addr_min;
+	  //race_addrs.push_back(paddr);
+	  //Printf("addr %p is added\n", addr_min);
 
-  }
+  //}
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }
 

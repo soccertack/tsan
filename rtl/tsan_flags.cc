@@ -67,8 +67,8 @@ void InitializeFlags(Flags *f, const char *env) {
 
   // Default values.
   f->enable_annotations = true;
-  f->suppress_equal_stacks = true;
-  f->suppress_equal_addresses = true;
+  f->suppress_equal_stacks = false;
+  f->suppress_equal_addresses = false;
   f->report_bugs = true;
   f->report_thread_leaks = true;
   f->report_destroy_locked = true;
