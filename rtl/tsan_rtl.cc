@@ -43,6 +43,7 @@ extern "C" void __tsan_resume() {
 
 namespace __tsan {
 
+extern bool is_racy_addr(uptr addr);
 #ifndef TSAN_GO
 THREADLOCAL char cur_thread_placeholder[sizeof(ThreadState)] ALIGNED(64);
 #endif
@@ -642,7 +643,7 @@ ALWAYS_INLINE
 bool ContainsSameAccessSlow(u64 *s, u64 a, u64 sync_epoch, bool is_write) {
 
 	/* TODO: for now, bypass this logic if a race is already detected at this addr */
-	if (race_addr == ShadowToMem((uptr)s))
+	if (is_racy_addr(ShadowToMem((uptr)s)))
 		return false;
   Shadow cur(a);
   for (uptr i = 0; i < kShadowCnt; i++) {
@@ -732,7 +733,7 @@ ALWAYS_INLINE USED
 void MemoryAccess(ThreadState *thr, uptr pc, uptr addr,
     int kAccessSizeLog, bool kAccessIsWrite, bool kIsAtomic) {
   u64 *shadow_mem = (u64*)MemToShadow(addr);
-  DPrintf2("#%d: MemoryAccess: @%p %p size=%d"
+  DPrintf2("#%d: jMemoryAccess: @%p %p size=%d"
       " is_write=%d shadow_mem=%p {%zx, %zx, %zx, %zx}\n",
       (int)thr->fast_state.tid(), (void*)pc, (void*)addr,
       (int)(1 << kAccessSizeLog), kAccessIsWrite, shadow_mem,

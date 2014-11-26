@@ -92,6 +92,12 @@ struct ReportThread {
   char *name;
   int parent_tid;
   ReportStack *stack;
+  
+  /* from here, it's for racy_addr */
+  ReportThread *next;
+  u64 sec;
+  u64 nsec;
+  
 };
 
 struct ReportMutex {
@@ -111,6 +117,7 @@ class ReportDesc {
   Vector<ReportThread*> threads;
   Vector<int> unique_tids;
   ReportStack *sleep;
+  uptr alloc_counter;
   int count;
 
   ReportDesc();

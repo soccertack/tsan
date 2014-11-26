@@ -25,12 +25,46 @@
 #include "tsan_mman.h"
 #include "tsan_flags.h"
 #include "tsan_fd.h"
+#include "sanitizer_common/sanitizer_list.h"
 #include <time.h>
-
 namespace __tsan {
 
 uptr race_addr = 0;
+IntrusiveList<ReportThread> race_addrs;
+//std::set<uptr> race_addrs;
 
+struct timespec timespec_diff(struct timespec start, struct timespec end)
+{
+	struct timespec temp;
+	if ((end.tv_nsec-start.tv_nsec)<0) {
+		temp.tv_sec = end.tv_sec-start.tv_sec-1;
+		temp.tv_nsec = 1000000000+end.tv_nsec-start.tv_nsec;
+	} else {
+		temp.tv_sec = end.tv_sec-start.tv_sec;
+		temp.tv_nsec = end.tv_nsec-start.tv_nsec;
+	}
+	return temp;
+}
+
+ReportThread* is_racy_addr(uptr addr)
+{
+	uptr tmp_addr = 0;
+	ReportThread *tmp_ptr;
+//	Printf("looking for %p\n", addr);
+	IntrusiveList<ReportThread>::Iterator it(&race_addrs);
+	while (it.hasNext()) {
+		tmp_ptr = it.next();
+		tmp_addr = tmp_ptr->pid;
+//		Printf("is_racy_Addr: %dth iteration, stored addr is %p\n", i, tmp);
+		if (tmp_addr == addr)
+		{
+//			Printf("return true!!!\n");
+			return tmp_ptr;
+		}
+	}
+//	Printf("return false!!!\n");
+	return NULL;
+}
 using namespace __sanitizer;  // NOLINT
 
 static ReportStack *SymbolizeStack(StackTrace trace);
@@ -356,6 +390,9 @@ void ScopedReport::AddSleep(u32 stack_id) {
   rep_->sleep = SymbolizeStackId(stack_id);
 }
 #endif
+void ScopedReport::AddAllocCounter(uptr alloc_counter) {
+  rep_->alloc_counter = alloc_counter;
+}
 
 void ScopedReport::SetCount(int count) {
   rep_->count = count;
@@ -435,10 +472,6 @@ void RestoreStack(int tid, const u64 epoch, VarSizeStackTrace *stk,
 static bool HandleRacyStacks(ThreadState *thr, VarSizeStackTrace traces[2],
                              uptr addr_min, uptr addr_max) {
   bool equal_stack = false;
-
-  /* TODO: we'll skip this if there is already race at this addr.  
-  It's also possible to turn off suppress flags */
-  return false;
 
   RacyStacks hash;
   if (flags()->suppress_equal_stacks) {
@@ -636,8 +669,10 @@ void ReportRace(ThreadState *thr) {
   if (IsFiredSuppression(ctx, rep, traces[1]))
     return;
 
+  if(!is_racy_addr(addr_min)) {
   if (HandleRacyStacks(thr, traces, addr_min, addr_max))
     return;
+  }
 
   for (uptr i = 0; i < kMop; i++) {
     Shadow s(thr->racy_state[i]);
@@ -663,20 +698,36 @@ void ReportRace(ThreadState *thr) {
       rep.AddSleep(thr->last_sleep_stack_id);
   }
 #endif
+  rep.AddAllocCounter(thr->alloc_counter);
 
   if (!OutputReport(thr, rep))
     return;
 
   /* Just test to print timestamp */
-  if(race_addr) {
-	  struct timespec ts_current;
-	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
-	  Printf("The timestamp of is %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
+  struct timespec ts_current;
+  clock_gettime(CLOCK_MONOTONIC, &ts_current);
+  ReportThread* tmp_ptr = is_racy_addr(addr_min);
+  if(tmp_ptr) {
+  	struct timespec ts_prev;
+	ts_prev.tv_sec = tmp_ptr->sec;
+	ts_prev.tv_nsec = tmp_ptr->nsec;
+	  Printf("The prev timestamp of is %lld:%lld\n",tmp_ptr->sec, tmp_ptr->nsec);
+	  Printf("The current timestamp of is %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
+  	struct timespec ts_diff;
+	ts_diff = timespec_diff(ts_prev, ts_current);
+	  Printf("\n\nThe diff is %lld:%09lld\n\n\n",ts_diff.tv_sec, ts_diff.tv_nsec);
+
+	  tmp_ptr->sec = ts_current.tv_sec;
+	  tmp_ptr->nsec = ts_current.tv_nsec;
+  } else {
+	  void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
+	  ReportThread *paddr = new(mem) ReportThread();
+	  paddr->pid = addr_min;
+	  paddr->sec = ts_current.tv_sec;
+	  paddr->nsec = ts_current.tv_nsec;
+	  race_addrs.push_back(paddr);
+	  Printf("addr %p is added\n", addr_min);
   }
-
-  /* TODO: This should be adding addr to set of race_addr. We can use Set or Hash. */
-  race_addr = addr;
-
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }
 

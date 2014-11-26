@@ -100,6 +100,9 @@ void user_free(ThreadState *thr, uptr pc, void *p, bool signal) {
 void OnUserAlloc(ThreadState *thr, uptr pc, uptr p, uptr sz, bool write) {
   DPrintf("#%d: alloc(%zu) = %p\n", thr->tid, sz, p);
   ctx->metamap.AllocBlock(thr, pc, p, sz);
+
+  thr->alloc_counter+=sz;
+
   if (write && thr->ignore_reads_and_writes == 0)
     MemoryRangeImitateWrite(thr, pc, (uptr)p, sz);
   else

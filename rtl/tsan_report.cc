@@ -311,6 +311,8 @@ void PrintReport(const ReportDesc *rep) {
   if (rep->sleep)
     PrintSleep(rep->sleep);
 
+  Printf("Memory allocated: %zd\n", rep->alloc_counter);
+
   for (uptr i = 0; i < rep->locs.Size(); i++)
     PrintLocation(rep->locs[i]);
 
