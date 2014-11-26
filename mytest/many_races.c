@@ -12,7 +12,7 @@ int global4;
 int global5;
 
 // Starting two Thread1_bug1 will create a race. The window here is small, just the printf.
-void *Thread_bug1(void *x) {
+void *Thread_PrintfBetween(void *x) {
     int temp = global1;
     printf("temp1 %d", temp);
     global1++;
@@ -20,7 +20,7 @@ void *Thread_bug1(void *x) {
 }
 
 // Starting two Thread1_bug2 will create a race. The window here is a loop with a fixed number of iteration.
-void *Thread_bug2(void *x) {
+void *Thread_StaticLoop(void *x) {
     int temp = global2;
     int temp2 = 0;
     for(int i = 0; i < 10000; i++) {
@@ -32,7 +32,7 @@ void *Thread_bug2(void *x) {
 }
 
 // Starting two Thread1_bug3 will create a race. The window here is a loop with the number of iterations dependent on the input x.
-void *Thread_bug3(void *x) {
+void *Thread_DynamicLoop(void *x) {
     int* loop = (int*) x;
     int temp = global3;
     int temp2 = 0;
@@ -45,7 +45,7 @@ void *Thread_bug3(void *x) {
 }
 
 // Starting two Thread1_bug4 will create a race. The window here is a read that might block.
-void *Thread_bug4(void *x) {
+void *Thread_BlockingRead(void *x) {
     char buf[1000];
     size_t nread;
     FILE* file = fopen("/dev/random", "rb");
@@ -64,7 +64,7 @@ void *Thread_bug4(void *x) {
 }
 //
 // Starting two Thread_bug5 will create a race. The window here is the malloc.
-void *Thread_bug5(void *x) {
+void *Thread_MallocBetween(void *x) {
     int temp = global5;
     char* buf = (char*) malloc(1000);
     global5++;
@@ -77,16 +77,16 @@ int main() {
 
     int inputLoop = 10000;
 
-    pthread_create(&t[0], NULL, Thread_bug1, NULL);
-    pthread_create(&t[1], NULL, Thread_bug1, NULL);
-    pthread_create(&t[2], NULL, Thread_bug2, NULL);
-    pthread_create(&t[3], NULL, Thread_bug2, NULL);
-    pthread_create(&t[4], NULL, Thread_bug3, &inputLoop);
-    pthread_create(&t[5], NULL, Thread_bug3, &inputLoop);
-    pthread_create(&t[6], NULL, Thread_bug4, NULL);
-    pthread_create(&t[7], NULL, Thread_bug4, NULL);
-    pthread_create(&t[8], NULL, Thread_bug5, NULL);
-    pthread_create(&t[9], NULL, Thread_bug5, NULL);
+    pthread_create(&t[0], NULL, Thread_PrintfBetween, NULL);
+    pthread_create(&t[1], NULL, Thread_PrintfBetween, NULL);
+    pthread_create(&t[2], NULL, Thread_StaticLoop, NULL);
+    pthread_create(&t[3], NULL, Thread_StaticLoop, NULL);
+    pthread_create(&t[4], NULL, Thread_DynamicLoop, &inputLoop);
+    pthread_create(&t[5], NULL, Thread_DynamicLoop, &inputLoop);
+    pthread_create(&t[6], NULL, Thread_BlockingRead, NULL);
+    pthread_create(&t[7], NULL, Thread_BlockingRead, NULL);
+    pthread_create(&t[8], NULL, Thread_MallocBetween, NULL);
+    pthread_create(&t[9], NULL, Thread_MallocBetween, NULL);
 
     int i = 0;
     for (i = 0; i < nthreads; i++) {
