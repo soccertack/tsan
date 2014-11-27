@@ -703,31 +703,20 @@ void ReportRace(ThreadState *thr) {
   if (!OutputReport(thr, rep))
     return;
 
-  /* Just test to print timestamp */
-  //struct timespec ts_current;
-  //clock_gettime(CLOCK_MONOTONIC, &ts_current);
-  //ReportThread* tmp_ptr = is_racy_addr(addr_min);
-  //if(tmp_ptr) {
-      //struct timespec ts_prev;
-	//ts_prev.tv_sec = tmp_ptr->sec;
-	//ts_prev.tv_nsec = tmp_ptr->nsec;
-	  //Printf("The prev timestamp of is %lld:%lld\n",tmp_ptr->sec, tmp_ptr->nsec);
-	  //Printf("The current timestamp of is %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
-      //struct timespec ts_diff;
-	//ts_diff = timespec_diff(ts_prev, ts_current);
-	  //Printf("\n\nThe diff is %lld:%09lld\n\n\n",ts_diff.tv_sec, ts_diff.tv_nsec);
+  ReportThread* tmp_ptr = is_racy_addr(addr_min);
+  if(!tmp_ptr) {
+	  struct timespec ts_current;
+	  clock_gettime(CLOCK_MONOTONIC, &ts_current);
 
-	  //tmp_ptr->sec = ts_current.tv_sec;
-	  //tmp_ptr->nsec = ts_current.tv_nsec;
-  //} else {
-	  //void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
-	  //ReportThread *paddr = new(mem) ReportThread();
-	  //paddr->pid = addr_min;
-	  //paddr->sec = ts_current.tv_sec;
-	  //paddr->nsec = ts_current.tv_nsec;
-	  //race_addrs.push_back(paddr);
-	  //Printf("addr %p is added\n", addr_min);
-  //}
+	  void *mem = internal_alloc(MBlockReportThread, sizeof(ReportThread));
+	  ReportThread *paddr = new(mem) ReportThread();
+
+	  paddr->pid = addr_min;
+	  paddr->sec = ts_current.tv_sec;
+	  paddr->nsec = ts_current.tv_nsec;
+
+	  race_addrs.push_back(paddr);
+  }
   AddRacyStacks(thr, traces, addr_min, addr_max);
 }
 

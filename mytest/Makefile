@@ -1,10 +1,13 @@
 all:
 	../../../../../build/bin/clang++ simple_race.cc -fsanitize=thread -fPIE -pie -g
-	../../../../../build/bin/clang four_races.c -fsanitize=thread -g -o four_races
+	../../../../../build/bin/clang many_races.c -fsanitize=thread -g -o many_races 
 ori:
 	../../../../../build_ori/bin/clang++ simple_race.cc -fsanitize=thread -fPIE -pie -g
-	../../../../../build_ori/bin/clang four_race.c -fsanitize=thread -g -o four_races
+	../../../../../build_ori/bin/clang many_races.c -fsanitize=thread -g -o  many_races
+run:
+	./a.out 2>report
+
 clean:
 	rm ./a.out
-	rm ./four_races
+	rm ./many_races
 

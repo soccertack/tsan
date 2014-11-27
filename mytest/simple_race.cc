@@ -10,8 +10,6 @@ void *Thread1(void *x) {
 	jin = 1;
 	sleep(1);
 	jin = 2;
-	sleep(3);
-	jin = 4;
 	    return NULL;
 }
 

@@ -338,7 +338,7 @@ void PrintReport(const ReportDesc *rep) {
 
   Printf("Heuristics:\n");
   Printf("Memory allocated: %zd\n", rep->alloc_counter);
-  Printf("Report Timestamp: %lld:%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
+  Printf("Report Timestamp: %lld.%lld\n",ts_current.tv_sec, ts_current.tv_nsec);
 }
 
 #else  // #ifndef TSAN_GO
