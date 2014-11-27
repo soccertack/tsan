@@ -1,0 +1,8 @@
+how to use reorder.py
+
+1. run program and dump tsan output to any file
+./a.out 2>report
+
+2. run reorder.py (by default, input file name is report)
+./reorder.py
+
