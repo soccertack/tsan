@@ -106,7 +106,13 @@ def reorderReport(fname):
 				
 		if "  Write of size" in line:
 			line_split = line.split()
-		#	print "addr:", line_split[5]
+			addr = line_split[5]
+			tid = line_split[8][:-1]
+			if not addr_map.get(addr):
+				isFirstRace = 1
+
+		if "  Read of size" in line:
+			line_split = line.split()
 			addr = line_split[5]
 			tid = line_split[8][:-1]
 			if not addr_map.get(addr):
@@ -173,10 +179,11 @@ def main():
 #		print	addr_map[item]
 		foo = collections.OrderedDict(reversed(sorted(addr_map[item].iteritems(), key=lambda x:x[1][2])))
 		for item_foo in foo:
-			print "Window size is %.3f sec"%foo[item_foo][diff_pos]
-			if foo[item_foo][mdiff_pos] != 0:
-				print "Mem alloc %d bytes"%foo[item_foo][mdiff_pos]
-			print foo[item_foo][content_pos]
+			if foo[item_foo][content_pos] != "":
+				print "Window size is %.3f sec"%foo[item_foo][diff_pos]
+				if foo[item_foo][mdiff_pos] != 0:
+					print "Mem alloc %d bytes"%foo[item_foo][mdiff_pos]
+				print foo[item_foo][content_pos]
 
 	sys.exit(0)
 
