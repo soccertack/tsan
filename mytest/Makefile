@@ -5,7 +5,8 @@ ori:
 	../../../../../build_ori/bin/clang++ simple_race.cc -fsanitize=thread -fPIE -pie -g
 	../../../../../build_ori/bin/clang many_races.c -fsanitize=thread -g -o  many_races
 run:
-	./a.out 2>report
+	! ./a.out 2>report
+	./reorder.py
 
 clean:
 	rm ./a.out

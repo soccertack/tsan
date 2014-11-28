@@ -6,6 +6,9 @@ import argparse
 import bisect
 import collections
 
+addr_dict = collections.OrderedDict()
+addr_map = {}
+
 def enum(*sequential, **named):
 	enums = dict(zip(sequential, range(len(sequential))), **named)
 	return type('Enum', (), enums)
@@ -81,6 +84,9 @@ def reorderReport(fname):
 		line = fin.readline()
 		if not line:
 			break;
+
+		if (parse_state == state.STARTED):
+			content = content + line
 		if line[0] == "=":
 			if parse_state == state.NONE:
 				parse_state = state.STARTED
@@ -88,6 +94,7 @@ def reorderReport(fname):
 				tid = 0
 				addr = 0
 				print "=================> START <==============================================="
+				content = line
 			elif parse_state == state.STARTED:
 				parse_state = state.NONE
 				print "=================> END <==============================================="
@@ -117,20 +124,18 @@ def reorderReport(fname):
 			if isFirstRace == 1:
 				print "The first race"
 				newdict = collections.OrderedDict()
-				newdict[len(newdict)] = (prev_tid, curr_ts, diff_ts)
-				newdict[len(newdict)] = (tid, curr_ts, diff_ts)
+				newdict[len(newdict)] = (prev_tid, curr_ts, diff_ts, "")
+				newdict[len(newdict)] = (tid, curr_ts, diff_ts, content)
 				addr_map[addr] = newdict
-				print addr_map[addr]
+				#print addr_map[addr]
 			else:
 				old_dict =  addr_map[addr]
 				print "Existing race"
-				old_dict[len(old_dict)] = (tid, curr_ts, diff_ts)
-				print old_dict
+				old_dict[len(old_dict)] = (tid, curr_ts, diff_ts, content)
+				#print old_dict
 
 	fin.close()
 
-addr_dict = collections.OrderedDict()
-addr_map = {}
 def main():
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i", "--input", help="input file", action='store', dest='input_file')
@@ -146,15 +151,16 @@ def main():
 	
 	reorderReport(filename)
 
-	newdict = collections.OrderedDict()
-	newdict[2] = ("TID1", 10, 2)
-	newdict[1] = ("TID2", 10, 11)
-	newdict[3] = ("TID2", 10, 3)
-
-	addr_map["0x7fef2087b818"] = newdict
 #	for item in reversed(newdict.items()):
 
-	foo = collections.OrderedDict(sorted(newdict.iteritems(), key=lambda x:x[1][2]))
+#	print addr_map
+	for item in addr_map:
+#		print item
+#		print	addr_map[item]
+		foo = collections.OrderedDict(reversed(sorted(addr_map[item].iteritems(), key=lambda x:x[1][2])))
+		for item_foo in foo:
+			print "Window size is", foo[item_foo][2]
+			print foo[item_foo][3]
 
 	sys.exit(0)
 
