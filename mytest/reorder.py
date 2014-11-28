@@ -8,6 +8,12 @@ import collections
 
 addr_dict = collections.OrderedDict()
 addr_map = {}
+tid_pos = 0
+time_pos = 1
+diff_pos = 2
+content_pos = 3
+mem_pos = 4
+mdiff_pos = 5
 
 def enum(*sequential, **named):
 	enums = dict(zip(sequential, range(len(sequential))), **named)
@@ -93,17 +99,14 @@ def reorderReport(fname):
 				isFirstRace = 0
 				tid = 0
 				addr = 0
-				print "=================> START <==============================================="
 				content = line
+				curr_mem = 0
 			elif parse_state == state.STARTED:
 				parse_state = state.NONE
-				print "=================> END <==============================================="
 				
 		if "  Write of size" in line:
-		#	print "write detected"
-		#	print line
 			line_split = line.split()
-			print "addr:", line_split[5]
+		#	print "addr:", line_split[5]
 			addr = line_split[5]
 			tid = line_split[8][:-1]
 			if not addr_map.get(addr):
@@ -112,26 +115,37 @@ def reorderReport(fname):
 		if "  Previous " in line:
 			line_split = line.split()
 			prev_tid = line_split[9][:-1]
+		if "Memory allocated" in line:
+			line_split = line.split(" ")
+			curr_mem= int(line_split[2])
+
 		if "Report Timestamp" in line:
 			line_split = line.split(" ")
 			curr_ts = float(line_split[2])
-			if isFirstRace == 1:
-				prev_ts = curr_ts
-			else:
+			prev_ts = curr_ts
+			prev_mem = curr_mem
+			if isFirstRace == 0:
 				old_dict =  addr_map[addr]
+				for item in reversed(old_dict.items()):
+					if item[1][tid_pos] == tid:
+						prev_ts = item[1][time_pos]
+						prev_mem = item[1][mem_pos]
+						break;
+
 			diff_ts = curr_ts - prev_ts
+			diff_mem = curr_mem - prev_mem
 
 			if isFirstRace == 1:
-				print "The first race"
+				#print "The first race"
 				newdict = collections.OrderedDict()
-				newdict[len(newdict)] = (prev_tid, curr_ts, diff_ts, "")
-				newdict[len(newdict)] = (tid, curr_ts, diff_ts, content)
+				newdict[len(newdict)] = (prev_tid, curr_ts, diff_ts, "", curr_mem, 0)
+				newdict[len(newdict)] = (tid, curr_ts, diff_ts, content, curr_mem, 0)
 				addr_map[addr] = newdict
 				#print addr_map[addr]
 			else:
 				old_dict =  addr_map[addr]
-				print "Existing race"
-				old_dict[len(old_dict)] = (tid, curr_ts, diff_ts, content)
+				#print "Existing race"
+				old_dict[len(old_dict)] = (tid, curr_ts, diff_ts, content, curr_mem, diff_mem)
 				#print old_dict
 
 	fin.close()
@@ -147,7 +161,7 @@ def main():
 		print filename
 	else:
 		filename = "report"
-		print "default file is report"
+	#	print "default file is report"
 	
 	reorderReport(filename)
 
@@ -159,8 +173,10 @@ def main():
 #		print	addr_map[item]
 		foo = collections.OrderedDict(reversed(sorted(addr_map[item].iteritems(), key=lambda x:x[1][2])))
 		for item_foo in foo:
-			print "Window size is", foo[item_foo][2]
-			print foo[item_foo][3]
+			print "Window size is %.3f sec"%foo[item_foo][diff_pos]
+			if foo[item_foo][mdiff_pos] != 0:
+				print "Mem alloc %d bytes"%foo[item_foo][mdiff_pos]
+			print foo[item_foo][content_pos]
 
 	sys.exit(0)
 

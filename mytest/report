@@ -1,47 +1,124 @@
 ==================
-WARNING: ThreadSanitizer: data race (pid=7907)
-  Write of size 4 at 0x7fee55f7b818 by thread T2:
-    #0 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:17:4 (a.out+0x000000094e65)
+WARNING: ThreadSanitizer: data race (pid=8312)
+  Write of size 4 at 0x7f786066d818 by thread T2:
+    #0 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:20:4 (a.out+0x000000094e95)
 
-  Previous write of size 4 at 0x7fee55f7b818 by thread T1:
-    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:10:2 (a.out+0x000000094dda)
+  Previous write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094dda)
 
-  Location is global 'jin' of size 4 at 0x7fee55f7b818 (a.out+0x000001096818)
+  Location is global 'jin' of size 4 at 0x7f786066d818 (a.out+0x000001097818)
 
-  Thread T2 (tid=7910, running) created by main thread at:
+  Thread T2 (tid=8315, running) created by main thread at:
     #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
-    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:38:2 (a.out+0x000000094ffa)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:46:2 (a.out+0x0000000950ba)
 
-  Thread T1 (tid=7909, running) created by main thread at:
+  Thread T1 (tid=8314, running) created by main thread at:
     #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
-    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:37:2 (a.out+0x000000094fd4)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:45:2 (a.out+0x000000095094)
 
-SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:17 Thread2(void*)
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:20 Thread2(void*)
 ==================
 Heuristics:
 Memory allocated: 32
-Report Timestamp: 708537.120729883
+Report Timestamp: 711869.446069633
 ==================
-WARNING: ThreadSanitizer: data race (pid=7907)
-  Write of size 4 at 0x7fee55f7b818 by thread T1:
-    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:12:2 (a.out+0x000000094e03)
+WARNING: ThreadSanitizer: data race (pid=8312)
+  Write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:13:2 (a.out+0x000000094e03)
 
-  Previous write of size 4 at 0x7fee55f7b818 by thread T1:
-    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:10:2 (a.out+0x000000094dda)
+  Previous write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094dda)
 
   As if synchronized via sleep:
     #0 sleep /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:272 (a.out+0x0000000430e2)
-    #1 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094df1)
+    #1 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:12:2 (a.out+0x000000094df1)
 
-  Location is global 'jin' of size 4 at 0x7fee55f7b818 (a.out+0x000001096818)
+  Location is global 'jin' of size 4 at 0x7f786066d818 (a.out+0x000001097818)
 
-  Thread T1 (tid=7909, running) created by main thread at:
+  Thread T1 (tid=8314, running) created by main thread at:
     #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
-    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:37:2 (a.out+0x000000094fd4)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:45:2 (a.out+0x000000095094)
 
-SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:12 Thread1(void*)
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:13 Thread1(void*)
 ==================
 Heuristics:
 Memory allocated: 32
-Report Timestamp: 708538.74514089
-ThreadSanitizer: reported 2 warnings
+Report Timestamp: 711870.403507374
+==================
+WARNING: ThreadSanitizer: data race (pid=8312)
+  Write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:15:2 (a.out+0x000000094e2c)
+
+  Previous write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094dda)
+
+  As if synchronized via sleep:
+    #0 sleep /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:272 (a.out+0x0000000430e2)
+    #1 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:14:2 (a.out+0x000000094e1a)
+
+  Location is global 'jin' of size 4 at 0x7f786066d818 (a.out+0x000001097818)
+
+  Thread T1 (tid=8314, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:45:2 (a.out+0x000000095094)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:15 Thread1(void*)
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 711872.409167203
+==================
+WARNING: ThreadSanitizer: data race (pid=8312)
+  Write of size 4 at 0x7f786066d818 by thread T2:
+    #0 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:22:4 (a.out+0x000000094ecb)
+
+  Previous write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094dda)
+
+  As if synchronized via sleep:
+    #0 sleep /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:272 (a.out+0x0000000430e2)
+    #1 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:21:4 (a.out+0x000000094eab)
+
+  Location is global 'jin' of size 4 at 0x7f786066d818 (a.out+0x000001097818)
+
+  Thread T2 (tid=8315, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:46:2 (a.out+0x0000000950ba)
+
+  Thread T1 (tid=8314, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:45:2 (a.out+0x000000095094)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:22 Thread2(void*)
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 711874.452275683
+==================
+WARNING: ThreadSanitizer: data race (pid=8312)
+  Write of size 4 at 0x7f786066d818 by thread T2:
+    #0 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:25:4 (a.out+0x000000094f25)
+
+  Previous write of size 4 at 0x7f786066d818 by thread T1:
+    #0 Thread1(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:11:2 (a.out+0x000000094dda)
+
+  As if synchronized via sleep:
+    #0 sleep /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:272 (a.out+0x0000000430e2)
+    #1 Thread2(void*) /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:23:4 (a.out+0x000000094ee1)
+
+  Location is global 'jin' of size 4 at 0x7f786066d818 (a.out+0x000001097818)
+
+  Thread T2 (tid=8315, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:46:2 (a.out+0x0000000950ba)
+
+  Thread T1 (tid=8314, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (a.out+0x000000044e83)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:45:2 (a.out+0x000000095094)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/simple_race.cc:25 Thread2(void*)
+==================
+Heuristics:
+Memory allocated: 1032
+Report Timestamp: 711879.457682370
+ThreadSanitizer: reported 5 warnings
