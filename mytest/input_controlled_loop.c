@@ -21,12 +21,12 @@ int main(int argc, char *argv[]) {
     int inputLoop = atoi(argv[1]);
     printf("inputLoop address is %p %d\n", &inputLoop, inputLoop);
     int a = 1000;
-    int max = inputLoop;
+
 
 
     // bb true does not have calls or loops
-    if(inputLoop < a) {
-        inputLoop = a;
+    while(inputLoop < a) {
+        inputLoop++;
     }
     printf("inputLoop is: %d\n", inputLoop);
     return 0;

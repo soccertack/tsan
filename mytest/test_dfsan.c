@@ -19,20 +19,21 @@ int main(int argc, char *argv[]) {
 
     /*int inputLoop = atoi(argv[1]);*/
     int inputLoop = (int)argv;
+    int max = inputLoop;
     int a = 1000;
 
     // bb true does not have calls or loops
-    if(inputLoop < a) {
-        inputLoop = a;
-        dfsan_label inputLoop_label = dfsan_get_label(inputLoop);
+    if(max < a) {
+        max = a;
+        dfsan_label inputLoop_label = dfsan_get_label(max);
         if(dfsan_has_label(inputLoop_label, input_label)) {
-            printf("inputLoop is tainted by input but should not\n");
+            printf("max is tainted by input but should not\n");
             return 0;
         }
     } else {
-        dfsan_label inputLoop_label = dfsan_get_label(inputLoop);
+        dfsan_label inputLoop_label = dfsan_get_label(max);
         if(!dfsan_has_label(inputLoop_label, input_label)) {
-            printf("inputLoop is not tainted by input but should\n");
+            printf("max is not tainted by input but should\n");
             return 0;
         }
     }
