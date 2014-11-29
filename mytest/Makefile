@@ -1,5 +1,6 @@
 all: dataflow
 	../../../../../build/bin/clang++ simple_race.cc -fsanitize=thread -fPIE -pie -g
+	../../../../../build/bin/clang many_races.c -fsanitize=thread -g -o many_races 
 
 dataflow:
 	../../../../../build/bin/clang -fsanitize=dataflow test_dfsan.c -o test_dfsan
@@ -12,8 +13,12 @@ dataflow:
 
 ori:
 	../../../../../build_ori/bin/clang++ simple_race.cc -fsanitize=thread -fPIE -pie -g
-	../../../../../build_ori/bin/clang four_race.c -fsanitize=thread -g -o four_races
+	../../../../../build_ori/bin/clang many_races.c -fsanitize=thread -g -o  many_races
+run:
+	! ./a.out 2>report
+	./reorder.py
+
 clean:
 	rm ./a.out
-	rm ./four_races
+	rm ./many_races
 

@@ -1,0 +1,185 @@
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Read of size 4 at 0x000001496818 by thread T2:
+    #0 Thread_PrintfBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:16:5 (many_races+0x00000049446d)
+
+  Previous write of size 4 at 0x000001496818 by thread T1:
+    #0 Thread_PrintfBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:18:5 (many_races+0x0000004944cb)
+
+  Location is global 'global1' of size 4 at 0x000001496818 (many_races+0x000001496818)
+
+  Thread T2 (tid=8505, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:85:5 (many_races+0x000000494bc2)
+
+  Thread T1 (tid=8504, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:84:5 (many_races+0x000000494b99)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:16 Thread_PrintfBetween
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.512709914
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Write of size 4 at 0x000001496818 by thread T2:
+    #0 Thread_PrintfBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:18:5 (many_races+0x0000004944cb)
+
+  Previous write of size 4 at 0x000001496818 by thread T1:
+    #0 Thread_PrintfBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:18:5 (many_races+0x0000004944cb)
+
+  Location is global 'global1' of size 4 at 0x000001496818 (many_races+0x000001496818)
+
+  Thread T2 (tid=8505, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:85:5 (many_races+0x000000494bc2)
+
+  Thread T1 (tid=8504, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:84:5 (many_races+0x000000494b99)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:18 Thread_PrintfBetween
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.516812004
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Write of size 4 at 0x000001496828 by thread T3:
+    #0 Thread_StaticLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:30:5 (many_races+0x000000494658)
+
+  Previous read of size 4 at 0x000001496828 by thread T4:
+    #0 Thread_StaticLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:24:5 (many_races+0x00000049452d)
+
+  Location is global 'global2' of size 4 at 0x000001496828 (many_races+0x000001496828)
+
+  Thread T3 (tid=8506, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:86:5 (many_races+0x000000494beb)
+
+  Thread T4 (tid=8508, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:87:5 (many_races+0x000000494c14)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:30 Thread_StaticLoop
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.521632545
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Write of size 4 at 0x000001496828 by thread T4:
+    #0 Thread_StaticLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:30:5 (many_races+0x000000494658)
+
+  Previous write of size 4 at 0x000001496828 by thread T3:
+    #0 Thread_StaticLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:30:5 (many_races+0x000000494658)
+
+  Location is global 'global2' of size 4 at 0x000001496828 (many_races+0x000001496828)
+
+  Thread T4 (tid=8508, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:87:5 (many_races+0x000000494c14)
+
+  Thread T3 (tid=8506, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:86:5 (many_races+0x000000494beb)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:30 Thread_StaticLoop
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.524247446
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Read of size 4 at 0x000001496820 by thread T6:
+    #0 Thread_DynamicLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:37:5 (many_races+0x0000004946d5)
+
+  Previous write of size 4 at 0x000001496820 by thread T5:
+    #0 Thread_DynamicLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:43:5 (many_races+0x000000494824)
+
+  Location is global 'global3' of size 4 at 0x000001496820 (many_races+0x000001496820)
+
+  Thread T6 (tid=8510, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:89:5 (many_races+0x000000494c65)
+
+  Thread T5 (tid=8509, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:88:5 (many_races+0x000000494c3b)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:37 Thread_DynamicLoop
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.527974774
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Write of size 4 at 0x000001496820 by thread T6:
+    #0 Thread_DynamicLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:43:5 (many_races+0x000000494824)
+
+  Previous write of size 4 at 0x000001496820 by thread T5:
+    #0 Thread_DynamicLoop /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:43:5 (many_races+0x000000494824)
+
+  Location is global 'global3' of size 4 at 0x000001496820 (many_races+0x000001496820)
+
+  Thread T6 (tid=8510, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:89:5 (many_races+0x000000494c65)
+
+  Thread T5 (tid=8509, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:88:5 (many_races+0x000000494c3b)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:43 Thread_DynamicLoop
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.532789046
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Read of size 4 at 0x00000149681c by thread T10:
+    #0 Thread_MallocBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:68:5 (many_races+0x000000494a6d)
+
+  Previous write of size 4 at 0x00000149681c by thread T9:
+    #0 Thread_MallocBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:70:5 (many_races+0x000000494acc)
+
+  Location is global 'global5' of size 4 at 0x00000149681c (many_races+0x00000149681c)
+
+  Thread T10 (tid=8514, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:93:5 (many_races+0x000000494d15)
+
+  Thread T9 (tid=8513, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:92:5 (many_races+0x000000494ce9)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:68 Thread_MallocBetween
+==================
+Heuristics:
+Memory allocated: 32
+Report Timestamp: 712869.537942471
+==================
+WARNING: ThreadSanitizer: data race (pid=8502)
+  Write of size 4 at 0x00000149681c by thread T10:
+    #0 Thread_MallocBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:70:5 (many_races+0x000000494acc)
+
+  Previous write of size 4 at 0x00000149681c by thread T9:
+    #0 Thread_MallocBetween /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:70:5 (many_races+0x000000494acc)
+
+  Location is global 'global5' of size 4 at 0x00000149681c (many_races+0x00000149681c)
+
+  Thread T10 (tid=8514, running) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:93:5 (many_races+0x000000494d15)
+
+  Thread T9 (tid=8513, finished) created by main thread at:
+    #0 pthread_create /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/rtl/tsan_interceptors.cc:898 (many_races+0x000000444513)
+    #1 main /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:92:5 (many_races+0x000000494ce9)
+
+SUMMARY: ThreadSanitizer: data race /home/soccertack/dev/llvm/projects/compiler-rt/lib/tsan/mytest/many_races.c:70 Thread_MallocBetween
+==================
+Heuristics:
+Memory allocated: 1032
+Report Timestamp: 712869.539562952
+ThreadSanitizer: reported 8 warnings

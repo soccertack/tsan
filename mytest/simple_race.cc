@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 int jin=0;
 int mat=0;
@@ -10,12 +11,17 @@ void *Thread1(void *x) {
 	jin = 1;
 	sleep(1);
 	jin = 2;
-	sleep(3);
-	jin = 4;
+	sleep(2);
+	jin = 2;
 	    return NULL;
 }
 
 void *Thread2(void *x) {
+	  jin++;
+	  sleep(5);
+	  jin++;
+	  sleep(5);
+    	char* buf = (char*) malloc(1000);
 	  jin++;
 	    return NULL;
 }

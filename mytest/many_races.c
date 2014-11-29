@@ -73,6 +73,10 @@ void *Thread_MallocBetween(void *x) {
     return NULL;
 }
 
+void *Thread_Nothing(void *x) {
+	return NULL;
+}
+
 int main() {
     const int nthreads = 2;
     pthread_t t[nthreads];
