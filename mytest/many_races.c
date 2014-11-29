@@ -13,8 +13,10 @@ int global5;
 
 // Starting two Thread1_bug1 will create a race. The window here is small, just the printf.
 void *Thread_PrintfBetween(void *x) {
+    global1++;
     int temp = global1;
     printf("temp1 %d", temp);
+    sleep(1);
     global1++;
     return NULL;
 }
@@ -72,21 +74,21 @@ void *Thread_MallocBetween(void *x) {
 }
 
 int main() {
-    const int nthreads = 10;
+    const int nthreads = 2;
     pthread_t t[nthreads];
 
     int inputLoop = 10000;
 
     pthread_create(&t[0], NULL, Thread_PrintfBetween, NULL);
     pthread_create(&t[1], NULL, Thread_PrintfBetween, NULL);
-    pthread_create(&t[2], NULL, Thread_StaticLoop, NULL);
-    pthread_create(&t[3], NULL, Thread_StaticLoop, NULL);
-    pthread_create(&t[4], NULL, Thread_DynamicLoop, &inputLoop);
-    pthread_create(&t[5], NULL, Thread_DynamicLoop, &inputLoop);
-    pthread_create(&t[6], NULL, Thread_BlockingRead, NULL);
-    pthread_create(&t[7], NULL, Thread_BlockingRead, NULL);
-    pthread_create(&t[8], NULL, Thread_MallocBetween, NULL);
-    pthread_create(&t[9], NULL, Thread_MallocBetween, NULL);
+    /*pthread_create(&t[2], NULL, Thread_StaticLoop, NULL);*/
+    /*pthread_create(&t[3], NULL, Thread_StaticLoop, NULL);*/
+    /*pthread_create(&t[4], NULL, Thread_DynamicLoop, &inputLoop);*/
+    /*pthread_create(&t[5], NULL, Thread_DynamicLoop, &inputLoop);*/
+    /*pthread_create(&t[6], NULL, Thread_BlockingRead, NULL);*/
+    /*pthread_create(&t[7], NULL, Thread_BlockingRead, NULL);*/
+    /*pthread_create(&t[8], NULL, Thread_MallocBetween, NULL);*/
+    /*pthread_create(&t[9], NULL, Thread_MallocBetween, NULL);*/
 
     int i = 0;
     for (i = 0; i < nthreads; i++) {
