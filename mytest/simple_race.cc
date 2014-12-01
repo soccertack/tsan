@@ -28,7 +28,9 @@ void *Thread2(void *x) {
 
 void *Thread3(void *x) {
 	mat++;
-	sleep(2);
+	sleep(1);
+	  mat++;
+	sleep(10);
 	  mat++;
 	    return NULL;
 }
@@ -44,10 +46,10 @@ int main() {
 	pthread_t t[4];
 	pthread_create(&t[0], NULL, Thread1, NULL);
 	pthread_create(&t[1], NULL, Thread2, NULL);
-//	pthread_create(&t[2], NULL, Thread3, NULL);
-//	pthread_create(&t[3], NULL, Thread4, NULL);
+	pthread_create(&t[2], NULL, Thread3, NULL);
+	pthread_create(&t[3], NULL, Thread4, NULL);
 	pthread_join(t[0], NULL);
 	pthread_join(t[1], NULL);
-//	pthread_join(t[2], NULL);
-//	pthread_join(t[3], NULL);
+	pthread_join(t[2], NULL);
+	pthread_join(t[3], NULL);
 }
