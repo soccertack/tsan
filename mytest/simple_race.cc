@@ -1,24 +1,32 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 
+#define MAX_SIZE 10
+
 int global=0;
+char queue[MAX_SIZE] = {'\0',};
 
 void *Thread1(void *x) {
-	global = 1;
+    int next = strlen(queue);
+    if (next == MAX_SIZE) {
+        printf("ERROR\n");
+        return NULL;
+    }
 	sleep(2);
-	global = 2;
+	queue[next] = 1;
 	return NULL;
 }
 
 void *Thread2(void *x) {
 	int mysize = 10000;
-	global++;
+	queue[0]++;
 	char* buf = (char*) malloc(mysize);
 	for (int i = 0 ; i < mysize; i++)
 		buf[i] = i*7;
-	global++;
+	queue[0]++;
 	return NULL;
 }
 
