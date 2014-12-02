@@ -19,15 +19,15 @@ int main(int argc, char *argv[]) {
     printf("Begin\n");
 
     int inputLoop = atoi(argv[1]);
-    printf("inputLoop address is %p %d\n", &inputLoop, inputLoop);
-    int a = 1000;
-
-
+    printf("InputLoop address is %p %d\n", &inputLoop, inputLoop);
+    int a = 0;
 
     // bb true does not have calls or loops
-    while(inputLoop < a) {
-        inputLoop++;
+    for(a = 0; a < inputLoop; a++) {
+        printf("till to go: %d\n", inputLoop-a);
     }
     printf("inputLoop is: %d\n", inputLoop);
+
+    printf("End\n");
     return 0;
 }
