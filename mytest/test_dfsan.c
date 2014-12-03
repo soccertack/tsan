@@ -29,12 +29,16 @@ int main(int argc, char *argv[]) {
         if(dfsan_has_label(inputLoop_label, input_label)) {
             printf("max is tainted by input but should not\n");
             return 0;
+        } else {
+            printf("max is not tainted by input as expected\n");
         }
     } else {
         dfsan_label inputLoop_label = dfsan_get_label(max);
         if(!dfsan_has_label(inputLoop_label, input_label)) {
             printf("max is not tainted by input but should\n");
             return 0;
+        } else {
+            printf("max is tainted by input as expected\n");
         }
     }
     return 0;

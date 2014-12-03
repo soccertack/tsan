@@ -2,13 +2,19 @@ all: dataflow
 	../../../../../build/bin/clang many_races.c -fsanitize=thread -g -o many_races 
 
 dataflow:
-	../../../../../build/bin/clang -fsanitize=dataflow test_dfsan.c -o test_dfsan
-	../../../../../build/bin/clang -emit-llvm -fsanitize=dataflow test_dfsan.c -o test_dfsan.ll -S
-	../../../../../build/bin/clang -emit-llvm -fsanitize=dataflow input_controlled_loop.c -o input_controlled_loop_dataflowed.ll -S -g
-	../../../../../build/bin/opt -loops -load ../../../../../build/lib/WindowDataFlow.so -WindowDataFlow -stats -WindowBeginLocation=/home/mateus/reliable/llvm/projects/compiler-rt/lib/tsan/mytest/input_controlled_loop.c:19:5 -WindowEndLocation=/home/mateus/reliable/llvm/projects/compiler-rt/lib/tsan/mytest/input_controlled_loop.c:31:5 input_controlled_loop_dataflowed.ll -S > input_controlled_loop_dataflowed_instrumented.ll
-	../../../../../build/bin/clang -fsanitize=dataflow -emit-llvm ../../../../../lib/Transforms/llvm-windowrtl/runtime/runtime.c -o runtime_dataflowed.ll -S
-	../../../../../build/bin/llvm-link input_controlled_loop_dataflowed_instrumented.ll runtime_dataflowed.ll -S > input_controlled_loop_linked.ll
-	../../../../../build/bin/clang -fsanitize=dataflow input_controlled_loop_linked.ll -o input_controlled_loop
+	../../../../../build/bin/clang -emit-llvm input_controlled_loop.c -o input_controlled_loop.ll -S -g
+	../../../../../build/bin/opt -load ../../../../../build/lib/WindowDataFlow.so -WindowDataFlow -stats -WindowBeginLocation=/home/mateus/reliable/llvm/projects/compiler-rt/lib/tsan/mytest/input_controlled_loop.c:19:5 -WindowEndLocation=/home/mateus/reliable/llvm/projects/compiler-rt/lib/tsan/mytest/input_controlled_loop.c:32:5 input_controlled_loop.ll -S > input_controlled_loop_instrumented.ll
+	../../../../../build/bin/clang -emit-llvm ../../../../../lib/Transforms/llvm-windowrtl/runtime/runtime.c -o runtime.ll -S
+	../../../../../build/bin/llvm-link input_controlled_loop_instrumented.ll runtime.ll -S > input_controlled_loop_linked.ll
+	../../../../../build/bin/opt -dfsan -dfsan-abilist=/home/mateus/reliable/llvm/build/bin/../lib/clang/3.6.0/dfsan_abilist.txt input_controlled_loop_linked.ll -S > input_controlled_loop_linked_dataflowed.ll
+	../../../../../build/bin/clang -fsanitize=dataflow input_controlled_loop_linked_dataflowed.ll -o input_controlled_loop
+
+dataflowtest:
+	../../../../../build/bin/clang -emit-llvm test_dfsan.c -o test_dfsan.ll -S -g -v
+	../../../../../build/bin/opt -dfsan -dfsan-abilist=/home/mateus/reliable/llvm/build/bin/../lib/clang/3.6.0/dfsan_abilist.txt test_dfsan.ll -S > test_dfsan_dataflowed.ll 
+	../../../../../build/bin/clang -fsanitize=dataflow test_dfsan_dataflowed.ll -o test_dfsan -v
+	#../../../../../build/bin/clang -emit-llvm -fsanitize=dataflow test_dfsan.c -o test_dfsan.ll -S -g -v
+	#../../../../../build/bin/clang -fsanitize=dataflow test_dfsan.ll -o test_dfsan
 
 test: dataflow
 	./input_controlled_loop 5 | grep yes | wc -l
@@ -26,6 +32,7 @@ run:
 	./reorder.py
 
 clean:
-	rm ./a.out
+	rm *.ll
 	rm ./many_races
+	rm ./a.out
 
