@@ -14,8 +14,8 @@ int main(int argc, char *argv[]) {
         printf("Need loop input argument\n");
         return 0;
     }
-    globalInputLabel = dfsan_create_label("globalInputLabel", 0);
-    dfsan_set_label(globalInputLabel, &argv, argc);
+    /*globalInputLabel = dfsan_create_label("globalInputLabel", 0);*/
+    /*dfsan_set_label(globalInputLabel, &argv, argc);*/
     printf("Begin\n");
 
     int inputLoop = atoi(argv[1]);
@@ -23,8 +23,8 @@ int main(int argc, char *argv[]) {
     int a = 0;
     int max = inputLoop;
     // bb true does not have calls or loops
-    for(a = 0; a < inputLoop; a++) {
-        printf("till to go: %d\n", inputLoop-a);
+    for(a = 0; a < max; a++) {
+        printf("till to go: %d\n", max-a);
     }
     printf("inputLoop is: %d\n", inputLoop);
     printf("max is: %d\n", max);
